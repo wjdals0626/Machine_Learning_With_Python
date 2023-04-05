@@ -1,0 +1,48 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+# load dataset into Pandas DataFrame
+df = pd.read_csv(url, names=['sepal length','sepal width','petal length','petal width','target'])
+
+feature = ['sepal length', 'sepal width', 'petal length', 'petal width']
+
+# separating features
+x = df.loc[:,feature]
+
+# separating target
+y = df.loc[:,'target']
+
+#Standardising features
+x = StandardScaler().fit_transform(x)
+
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+X1 = np.array(x)
+y1 = np.array(y)
+lda = LinearDiscriminantAnalysis()
+lda.fit(X1, y1)
+
+df11=pd.DataFrame(lda.coef_[0].reshape(-1,1),feature,columns=["Weight"])
+df12=pd.DataFrame(lda.intercept_[0].reshape(-1,1),["Bias"],columns=["Weight"])
+resulty = pd.concat([df12, df11], axis=0)
+resulty
+
+from sklearn import metrics
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X1, y1, test_size=0.3, random_state=42, stratify=y)
+lda = LinearDiscriminantAnalysis()
+X_train1 = np.array(X_train)
+y_train1 = np.array(y_train)
+lda.fit(X_train1, y_train1)
+df11=pd.DataFrame(lda.coef_[0].reshape(-1,1),feature,columns=["Weight"])
+df12=pd.DataFrame(lda.intercept_[0].reshape(-1,1),["Bias"],columns=["Weight"])
+params = pd.concat([df12, df11], axis=0)
+params
+
+from sklearn.metrics import accuracy_score
+X_test1 = np.array(X_test)
+y_test1 = np.array(y_test)
+y_pred = lda.predict(X_test1)
+print('Accuracy of Linear Discriminant Analysis Model on test set: {:.2f}'.format(accuracy_score(y_test, y_pred)))
