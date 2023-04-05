@@ -1,0 +1,15 @@
+import numpy as np # to handle numeric data
+import matplotlib.pyplot as plt # for visualization
+import pandas as pd # for handling dataframe
+
+ourData = pd.read_csv('data.csv') # read the data
+ourData.head() # print the first five rows of our dataset
+
+newData = ourData.iloc[:, [3, 4]].values
+
+import scipy.cluster.hierarchy as sch # importing scipy.cluster.hierarchy for dendrogram
+dendrogram = sch.dendrogram(sch.linkage(newData, method = 'ward')) # finding the optimal number of clusters using dendrogram
+plt.title('Dendrogram') # title of the dendrogram
+plt.xlabel('') # label of the x-axis
+plt.ylabel('Euclidean distances') # label of the y-axis
+plt.show()
