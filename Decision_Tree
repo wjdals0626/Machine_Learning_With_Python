@@ -1,0 +1,70 @@
+###Part1###
+# Load libraries #패키지를 가져오는 함수
+import pandas as pd #pandas를 pd로 지정하겠다.
+from sklearn.tree import DecisionTreeClassifier # Import Decision Tree Classifier
+from sklearn.model_selection import train_test_split # Import train_test_split function
+from sklearn import metrics #Import scikit-learn metrics module for accuracy calculation
+
+# load dataset
+a = pd.read_csv("data.csv") #a에 data 저장
+a.head() #5개 행을 가져옴
+
+#split dataset 
+feature_cols = ['a1', 'a2', 'a3', 'a4','a5','a6','a7','a8']
+X = a[feature_cols] # Features
+y = a.y # Target variable
+
+# Split dataset into training set and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
+
+# Create Decision Tree classifer object
+clf = DecisionTreeClassifier()
+
+# Train Decision Tree Classifer
+clf = clf.fit(X_train,y_train)
+
+#Predict the response for test dataset
+y_pred = clf.predict(X_test)
+
+# Model Accuracy, how often is the classifier correct?
+print("Accuracy:",metrics.accuracy_score(y_test, y_pred)) #정확도
+
+###Part2###
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier # Import Decision Tree Classifier
+from sklearn.model_selection import train_test_split # Import train_test_split function
+from sklearn import metrics #Import scikit-learn metrics module for accuracy calculation
+import random #재현성 있는 코드 만들기 위해.
+
+random.seed(100)
+data = pd.read_csv('data(1).csv')
+print(data)
+print(data.describe()) #기술통계적 결과가 나옴 #연령 20개, 평균 36.75 #최소값 최대값
+
+x= data.iloc[:, [2,3]].values # select all rows, select the 2nd and 3rd columns
+y= data.iloc[:, -1].values  # select the last column
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=100)  #나이와 연봉 기반 모형을 만듬
+ # create regressor object
+# Create Decision Tree classifer object
+clf = DecisionTreeClassifier()
+
+# Train Decision Tree Classifer
+clf = clf.fit(x_train,y_train)
+
+#Predict the response for test dataset
+y_pred = clf.predict(x_test)
+
+print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+
+# Decision tree computing 'gini'
+from sklearn import tree
+import matplotlib.pyplot as plt #의사결정나무 시각화
+X, y = x_train, y_train
+clf = tree.DecisionTreeClassifier()
+clf = clf.fit(X, y)
+
+# Plotting the decision tree #참고만 하기
+plt.figure(figsize=(12,12)) #크기 지정
+tree.plot_tree(clf, fontsize=10)
+plt.show()
