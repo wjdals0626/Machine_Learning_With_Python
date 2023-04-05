@@ -1,0 +1,27 @@
+import pandas as pd
+from sklearn.linear_model import LogisticRegression # Import Logistic Regression Classifier
+from sklearn.model_selection import train_test_split # Import train_test_split function
+from sklearn import metrics #Import scikit-learn metrics module for accuracy calculation
+import random
+
+random.seed(100)
+data = pd.read_csv('data(1).csv')
+print(data)
+print(data.describe())
+
+x= data.iloc[:, [2,3]].values # select all rows, select the 2nd and 3rd columns
+y= data.iloc[:, -1].values  # select the last column
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=100)  
+ # create regressor object
+# Create Decision Tree classifer object
+clf = LogisticRegression()
+
+# Train Decision Tree Classifer
+clf = clf.fit(x_train,y_train) #fit으로 모형을 만듬.
+
+#Predict the response for test dataset
+y_pred = clf.predict(x_test)
+
+print("Accuracy:",metrics.accuracy_score(y_test, y_pred)) #로지스틱 회귀에서 정확도가 떨어짐. 
+#k-NN,DT 한묶음 선형,로지스틱회귀 한묶음으로 봤을때 회귀는 parametric이고, 정확도가 낮지만 각 특성의 중요도를 알 수 있음. k-NN과 DT는 분류를 할 수 있음.
