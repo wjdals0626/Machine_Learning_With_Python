@@ -1,0 +1,7 @@
+import math 
+
+print(0.005*0.003*0.002)
+
+print(math.log(0.005) + math.log(0.003) + math.log(0.002))
+
+print(math.exp(-17.322068455284253))
