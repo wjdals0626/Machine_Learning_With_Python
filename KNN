@@ -1,0 +1,43 @@
+# Importing the libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import random
+
+random.seed(100) #모델의 재현성을 주기 위해 설정.
+# Importing the dataset
+dataset = pd.read_csv('data(1).csv') #데이터 읽기
+X = dataset.iloc[:, [2, 3]].values #연령과 연봉 데이터 뽑은 것.
+y = dataset.iloc[:, -1].values #구입여부 데이터 모아둔 것.
+
+# Showing and plotting data values 
+print(dataset)
+print(X)
+print(y)
+plt.scatter(X[:,0],X[:,1], c=y) #관계 표현
+plt.show()
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split #상위 라이브러리에서 train_test_split함수를 가져옴.
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 0) #X,y 모아둔 값을 train 80%, test 20%(5-fold)으로 대응
+print(X_train)
+print(X_test) #4개의 테스트를 따로 뽑아서 분류
+
+# Training the K-NN model on the Training set
+from sklearn.neighbors import KNeighborsClassifier #분류 모형 가져옴
+classifier = KNeighborsClassifier(n_neighbors = 5, metric = 'minkowski', p = 2) #거리계산 방식 #거리의 차의 제곱의 합
+
+print(X_train)
+print(y_train)
+classifier.fit(X_train, y_train) #x와 y의 train 데이터로 모형을 만듬
+
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
+
+# Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix, accuracy_score
+cm = confusion_matrix(y_test, y_pred)
+ac = accuracy_score(y_test, y_pred)
+
+print(cm)
+print(ac) #완전히 일치하면 1이 나옴
